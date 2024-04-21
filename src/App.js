@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Header from './components/Header';
 import Note from "./components/Note";
 import NoteForm from "./components/NoteForm";
+import Modal from "./components/Modal"; // Assuming you have a Modal component
 
 const users = ["user1", "user2", "user3"];
 const user = users[0];
-const defaultState  = [
+const defaultState = [
     {
         title: 'Shopping list ',
         content: 'Potatoes\nFinish this app\n',
@@ -42,22 +43,39 @@ function App(props) {
     const [notes, setNotes] = useState(defaultState)
     const [showModal, setShowModal] = useState(false);
     const [editNote, setEditNote] = useState(null);
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false); // New state for delete confirmation
 
     const addNote = (newNote) => {
-        if (newNote.content.length !== 0) {
-            setNotes((prevNotes) => [...prevNotes, newNote]);
-            setShowModal(false);
+        //if (newNote.content.length !== 0) {
+        setNotes((prevNotes) => [...prevNotes, newNote]);
+        setShowModal(false);
+
+        // }
+    };
+
+    const deleteNote = (index) => {
+        if (deleteConfirmation) { // Only delete if confirmation is true
+            setNotes((prevNotes) => prevNotes.filter((note, idx) => idx !== index));
+            setDeleteConfirmation(false); // Reset delete confirmation state
         }
     };
 
-    const deleteNote = (id) => {
-        setNotes((prevNotes) => prevNotes.filter((note, index) => index !== id));
+    const openEditModal = (note) => {
+        console.log("Opening edit modal");
+        const updatedNotes = notes.map((n) => {
+            if (n === note) {
+                return editNote; // Use the current editNote state to update the note
+            }
+            return n;
+        });
+        setNotes(updatedNotes);
+        setShowModal(true);
     };
 
-    const openEditModal = (note) => {
-console.log("Opening edit modal");
-        setEditNote(note);
-        setShowModal(true);
+    const handleDeleteConfirmation = (index) => {
+        setDeleteConfirmation(true);
+        setShowModal(false); // Close the modal after confirmation
+        deleteNote(index);
     };
 
     function shareNote(id, userId) {
@@ -69,7 +87,7 @@ console.log("Opening edit modal");
 
     return (
         <div>
-            <Header onCreateNote={() => setShowModal(true)} />
+            <Header onCreateNote={() => setShowModal(true)}/>
             <NoteForm
                 show={showModal}
                 onHide={() => {
@@ -80,7 +98,7 @@ console.log("Opening edit modal");
                     if (editNote) {
                         const updatedNotes = notes.map((note, index) => {
                             if (index === notes.indexOf(editNote)) {
-                                return { ...editNote, ...newNote };
+                                return {...editNote, ...newNote};
                             }
                             return note;
                         });
@@ -100,14 +118,20 @@ console.log("Opening edit modal");
                     user={user}
                     owner={user}
                     sharedWith={[]}
-                    onDelete={() => deleteNote(index)}
+                    onDelete={() => setDeleteConfirmation(true)} // Set delete confirmation on delete button click
                     onEdit={() => openEditModal(note)}
                     onShare={shareNote}
                 />
             ))}
+            <Modal
+                show={deleteConfirmation}
+                onHide={() => setDeleteConfirmation(false)}
+                onConfirm={handleDeleteConfirmation}
+            >
+                Do you really want to do it?
+            </Modal>
         </div>
     );
 }
 
 export default App;
-
