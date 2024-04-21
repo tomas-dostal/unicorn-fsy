@@ -27,8 +27,8 @@ function CreateArea({onAdd}) {
         setNote({
             title: "",
             content: "",
-            user: user,
-            owner: user,
+            user: user.toString(),
+            owner: user.toString(),
             sharedWith: []
         });
         event.preventDefault();
