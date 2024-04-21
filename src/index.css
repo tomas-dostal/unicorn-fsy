@@ -15,19 +15,18 @@ body {
     box-sizing: border-box;
 }
 
-.header {
+header {
     box-shadow: 0 0 2px 0 rgb(112, 112, 112);
-    padding: 10px 20px;
-    margin: auto -10px;
-    display: flex;
+    display: flex ;
     flex-direction: row;
     align-self: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
 }
 
 form {
     position: relative;
-    width: 600px;
-    margin: 32px auto 50px auto;
     background: #3f3f3f;
     padding: 7px;
     border-radius: 7px;
@@ -46,6 +45,9 @@ form input {
     color: #ccc;
 }
 
+.modal-content{
+    background-color: none;
+}
 form textarea {
     width: 100%;
     border: none;
@@ -92,19 +94,22 @@ form textarea {
     border-radius: 50%;
 }
 
-form button {
-    position: absolute;
-    justify-content: center;
-    align-self: center;
-    right: 18px;
-    background: #03a9f4;
-    border: none;
-    border-radius: 50%;
-    box-shadow: 0 1px 7px 0 #03a9f4;
-    width: 36px;
-    height: 36px;
-}
+/*form button {*/
+/*    position: absolute;*/
+/*    justify-content: center;*/
+/*    align-self: center;*/
+/*    right: 18px;*/
+/*    background: #03a9f4;*/
+/*    border: none;*/
+/*    border-radius: 50%;*/
+/*    box-shadow: 0 1px 7px 0 #03a9f4;*/
+/*    width: 36px;*/
+/*    height: 36px;*/
+/*}*/
 
+.btn-new {
+
+}
 
 .popup-overlay {
   position: fixed;

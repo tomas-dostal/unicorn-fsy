@@ -1,10 +1,12 @@
-import './components/Header'
-import Header from './components/Header';
-import CreateArea from "./components/CreateArea";
-import Note from "./components/Note";
-import {useState} from "react";
+// App.js
 
-const users = ["user0", "user1", "user2"];
+import React, { useState } from 'react';
+import Header from './components/Header';
+import Note from "./components/Note";
+import NoteForm from "./components/NoteForm";
+import { Button } from "react-bootstrap";
+
+const users = ["user1", "user2", "user3"];
 const user = users[0];
 const defaultState  = [
     {
@@ -26,7 +28,7 @@ const defaultState  = [
         owner: user[1],
     },
     {
-        title: 'Sharing functionalty',
+        title: 'Sharing functionality',
         content: 'Redo sharing options so a popup will appear, showi…t all of the users the note is being shared with\n',
         sharedWith: [],
         owner: user
@@ -36,37 +38,63 @@ const defaultState  = [
         content: 'This is a note which is shared with me so I can not further share it nor delete it. Use Masonry view for listing notes',
         sharedWith: [user],
         owner: users[2]
-    }]
+    }
+];
 
 function App(props) {
     const [notes, setNotes] = useState(defaultState)
+    const [showModal, setShowModal] = useState(false);
+    const [editNote, setEditNote] = useState(null);
 
-    function addNote(newNote) {
-
+    const addNote = (newNote) => {
         if (newNote.content.length !== 0) {
-
-            console.log(newNote.content.size);
-            setNotes(prevValue => {
-                return [...prevValue, newNote];
-            });
+            setNotes((prevNotes) => [...prevNotes, newNote]);
+            setShowModal(false);
         }
-    }
-    function deleteNote(id){
-        setNotes(prevState => {
-            return [...prevState.filter((note,index) => index !== id)]
-        } )
-    }
+    };
 
-    function shareNote(id, userId){
+    const deleteNote = (id) => {
+        setNotes((prevNotes) => prevNotes.filter((note, index) => index !== id));
+    };
+
+    const openEditModal = (note) => {
+        setEditNote(note);
+        setShowModal(true);
+    };
+
+    function shareNote(id, userId) {
         setNotes(prevState => {
             prevState.at(id).sharedWith.push(userId);
             return [...prevState]
-        } )
+        })
     }
+
     return (
         <div>
-            <Header></Header>
-            <CreateArea onAdd={addNote}/>
+            <Header onCreateNote={() => setShowModal(true)} />
+            <NoteForm
+                show={showModal}
+                onHide={() => {
+                    setShowModal(false);
+                    setEditNote(null);
+                }}
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const newNote = {
+                        title: formData.get('title'),
+                        content: formData.get('content'),
+                    };
+                    if (editNote) {
+                        console.log("edit");
+                        // Handle update
+                        // Update your existing note with newNote
+                    } else {
+                        addNote(newNote);
+                    }
+                }}
+                note={editNote}
+            />
             {notes.map((note, index) => (
                 <Note
                     key={index}
@@ -76,7 +104,8 @@ function App(props) {
                     user={user}
                     owner={user}
                     sharedWith={[]}
-                    onDelete={deleteNote}
+                    onDelete={() => deleteNote(index)}
+                    onEdit={() => openEditModal(note)}
                     onShare={shareNote}
                 />
             ))}
