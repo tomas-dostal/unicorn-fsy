@@ -1,10 +1,7 @@
-// App.js
-
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Note from "./components/Note";
 import NoteForm from "./components/NoteForm";
-import { Button } from "react-bootstrap";
 
 const users = ["user1", "user2", "user3"];
 const user = users[0];
@@ -25,7 +22,7 @@ const defaultState  = [
         title: 'This one should not be visible for user0',
         content: 'super secret',
         sharedWith: [],
-        owner: user[1],
+        owner: users[1],
     },
     {
         title: 'Sharing functionality',
@@ -58,6 +55,7 @@ function App(props) {
     };
 
     const openEditModal = (note) => {
+console.log("Opening edit modal");
         setEditNote(note);
         setShowModal(true);
     };
@@ -78,17 +76,15 @@ function App(props) {
                     setShowModal(false);
                     setEditNote(null);
                 }}
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.target);
-                    const newNote = {
-                        title: formData.get('title'),
-                        content: formData.get('content'),
-                    };
+                onSubmit={(newNote) => {
                     if (editNote) {
-                        console.log("edit");
-                        // Handle update
-                        // Update your existing note with newNote
+                        const updatedNotes = notes.map((note, index) => {
+                            if (index === notes.indexOf(editNote)) {
+                                return { ...editNote, ...newNote };
+                            }
+                            return note;
+                        });
+                        setNotes(updatedNotes);
                     } else {
                         addNote(newNote);
                     }
@@ -114,3 +110,4 @@ function App(props) {
 }
 
 export default App;
+

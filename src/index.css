@@ -15,6 +15,9 @@ body {
     box-sizing: border-box;
 }
 
+.modal-content {
+    background-color: #3f3f3f;
+}
 header {
     box-shadow: 0 0 2px 0 rgb(112, 112, 112);
     display: flex ;
@@ -30,9 +33,10 @@ form {
     background: #3f3f3f;
     padding: 7px;
     border-radius: 7px;
-    box-shadow: 0 1px 7px 0 rgb(112, 112, 112, 0.5);
+    /*box-shadow: 0 1px 7px 0 rgb(112, 112, 112, 0.5);*/
     color: #eee;
 }
+
 
 form input {
     width: 100%;
@@ -45,13 +49,9 @@ form input {
     color: #ccc;
 }
 
-.modal-content{
-    background-color: none;
-}
 form textarea {
     width: 100%;
     border: none;
-    margin: 4px 10px;
     outline: none;
     font-size: 1.3em;
     resize: none;
