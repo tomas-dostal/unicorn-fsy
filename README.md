@@ -1,6 +1,6 @@
 > This code is based on [Google Keep clone by 
 devbyshahan](https://github.com/codewithshahan/Google-Keep/tree/main)
-
+and [BCAA repo](https://github.com/UnicornUniversity/bcaa-summer-2024/tree/master) by [Ivo Milota](mailto:ivo.milota@plus4u.net)
 
 ### `npm start`
 
