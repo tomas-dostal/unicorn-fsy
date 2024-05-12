@@ -21,7 +21,7 @@ function CreateArea({onAdd}) {
         })
     }
 
-    function submitButton(event) {
+    function submitButton(note) {
         onAdd(note);
         setExpanded(false);
         setNote({
@@ -31,7 +31,7 @@ function CreateArea({onAdd}) {
             owner: user,
             sharedWith: []
         });
-        event.preventDefault();
+        note.preventDefault();
     }
 
     function handleExpanded() {

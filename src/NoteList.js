@@ -17,7 +17,7 @@ function NoteList() {
     console.log(noteList);
 
     const filteredNoteList = noteList.filter(
-        (note) => true //new Date(event.date) > new Date()
+        (note) => true //new Date(note.date) > new Date()
     );
 
     return (

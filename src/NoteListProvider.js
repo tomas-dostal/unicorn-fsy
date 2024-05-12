@@ -1,13 +1,51 @@
 import {useContext, useEffect, useState} from "react";
 import {ListContext, NoteListContext} from "./NoteListContext.js";
 
+const users = ["user1", "user2", "user3"];
+const user = users[0];
+const mockedData = [
+    {
+        id: 1,
+        title: 'Shopping list ',
+        content: 'Potatoes\nFinish this app\n',
+        sharedWith: [],
+        owner: user,
+    },
+    {
+        id: 2,
+        title: 'UI of this app',
+        content: 'Move add button a bit up\nMore fancy CSS\nPopup window asking if I really want to delete a note',
+        sharedWith: [users[1]],
+        owner: user,
+    },
+    {
+        id: 3,
+        title: 'This one should not be visible for user0',
+        content: 'super secret',
+        sharedWith: [],
+        owner: users[1],
+    },
+    {
+        title: 'Sharing functionality',
+        content: 'Redo sharing options so a popup will appear, showi…t all of the users the note is being shared with\n',
+        sharedWith: [],
+        owner: user
+    },
+    {
+        id: 4,
+        title: 'Masonry view',
+        content: 'This is a note which is shared with me so I can not further share it nor delete it. Use Masonry view for listing notes',
+        sharedWith: [user],
+        owner: users[2]
+    }
+];
 
 function NoteListProvider({children}) {
     const initialNoteList = useContext(NoteListContext);
-    const [eventLoadObject, setEventLoadObject] = useState({
+    const [noteLoadObject, setNoteLoadObject] = useState({
         state: "ready",
         error: null,
-        data: initialNoteList,
+        data: { ...initialNoteList, mockedData}
     });
 
     useEffect(() => {
@@ -15,25 +53,25 @@ function NoteListProvider({children}) {
     }, []);
 
     async function handleLoad() {
-        // setEventLoadObject((current) => ({ ...current, state: "pending" }));
+        // setNoteLoadObject((current) => ({ ...current, state: "pending" }));
         // const response = await fetch("http://localhost:8000/note/list", {
         //     method: "GET",
         // });
         // const responseJson = await response.json();
         // if (response.status < 400) {
-        //     setEventLoadObject({ state: "ready", data: responseJson });
+        //     setNoteLoadObject({ state: "ready", data: responseJson });
         //     return responseJson;
         // } else {
-        //     setEventLoadObject((current) => ({
+        //     setNoteLoadObject((current) => ({
         //         state: "error",
         //         data: current.data,
         //         error: responseJson.error,
         //     }));
         //     throw new Error(JSON.stringify(responseJson, null, 2));
         try {
-            setEventLoadObject({ state: "ready", data: initialNoteList });
+            setNoteLoadObject({ state: "ready", data: initialNoteList });
         } catch (error) {
-            setEventLoadObject((current) => ({
+            setNoteLoadObject((current) => ({
                 state: "error",
                 data: current.data,
                 error: error.message,
@@ -42,7 +80,7 @@ function NoteListProvider({children}) {
     }
 
     async function handleCreate(dtoIn) {
-        // setEventLoadObject((current) => ({ ...current, state: "pending" }));
+        // setNoteLoadObject((current) => ({ ...current, state: "pending" }));
         // const response = await fetch("http://localhost:8000/note/create", {
         //     method: "POST",
         //     headers: {
@@ -53,34 +91,34 @@ function NoteListProvider({children}) {
         // const responseJson = await response.json();
         //
         // if (response.status < 400) {
-        //     setEventLoadObject((current) => {
+        //     setNoteLoadObject((current) => {
         //         current.data.push(responseJson);
         //         current.data.sort((a, b) =>  true); //new Date(a.date) - new Date(b.date));
         //         return { state: "ready", data: current.data };
         //     });
         //     return responseJson;
         // } else {
-        //     setEventLoadObject((current) => {
+        //     setNoteLoadObject((current) => {
         //         return { state: "error", data: current.data, error: responseJson };
         //     });
         //     throw new Error(JSON.stringify(responseJson, null, 2));
         // }
         const newNote = {
-            id: eventLoadObject.data.length + 1,
+            id: noteLoadObject.data.length + 1,
             title: dtoIn.title,
             content: dtoIn.content,
             sharedWith: [],
             owner: "user1",
         };
 
-        setEventLoadObject((current) => ({
+        setNoteLoadObject((current) => ({
             ...current,
             data: [...current.data, newNote], // Add new note to data array
         }));
     }
 
     async function handleUpdate(dtoIn) {
-        // setEventLoadObject((current) => ({ ...current, state: "pending" }));
+        // setNoteLoadObject((current) => ({ ...current, state: "pending" }));
         // const response = await fetch("http://localhost:8000/note/update", {
         //     method: "POST",
         //     headers: { "Content-Type": "application/json" },
@@ -89,28 +127,28 @@ function NoteListProvider({children}) {
         // const responseJson = await response.json();
         //
         // if (response.status < 400) {
-        //     setEventLoadObject((current) => {
-        //         const eventIndex = current.data.findIndex(
+        //     setNoteLoadObject((current) => {
+        //         const noteIndex = current.data.findIndex(
         //             (e) => e.id === responseJson.id
         //         );
-        //         current.data[eventIndex] = responseJson;
+        //         current.data[noteIndex] = responseJson;
         //         current.data.sort((a, b) => new Date(a.date) - new Date(b.date));
         //         return { state: "ready", data: current.data };
         //     });
         //     return responseJson;
         // } else {
-        //     setEventLoadObject((current) => ({
+        //     setNoteLoadObject((current) => ({
         //         state: "error",
         //         data: current.data,
         //         error: responseJson,
         //     }));
         //     throw new Error(JSON.stringify(responseJson, null, 2));
         // }
-        const noteIndex = eventLoadObject.data.findIndex((note) => note.id === dtoIn.id);
+        const noteIndex = noteLoadObject.data.findIndex((note) => note.id === dtoIn.id);
         if (noteIndex !== -1) {
-            const updatedData = [...eventLoadObject.data];
+            const updatedData = [...noteLoadObject.data];
             updatedData[noteIndex] = { ...updatedData[noteIndex], ...dtoIn };
-            setEventLoadObject((current) => ({ ...current, data: updatedData }));
+            setNoteLoadObject((current) => ({ ...current, data: updatedData }));
             return updatedData[noteIndex];
         } else {
             throw new Error("Note not found");
@@ -119,8 +157,8 @@ function NoteListProvider({children}) {
 
 
     const value = {
-        state: eventLoadObject.state,
-        eventList: eventLoadObject.data || [],
+        state: noteLoadObject.state,
+        noteList: noteLoadObject.data || [],
         handlerMap: {handleCreate, handleUpdate},
     };
 

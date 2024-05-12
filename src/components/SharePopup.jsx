@@ -6,8 +6,8 @@ const SharePopup = ({ users, onSelect, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
+  const handleInputChange = (note) => {
+    setSearchTerm(note.target.value);
     setSelectedUser(null); // Reset selected user when input changes
   };
 
