@@ -14,6 +14,7 @@ function NoteList() {
     const { noteList = [] } = useContext(NoteListContext); // Access noteList from NoteListContext
     const [showNoteForm, setShowNoteForm] = useState(false);
 
+    console.log(" notelist: ") ;
     console.log(noteList);
 
     const filteredNoteList = noteList.filter(

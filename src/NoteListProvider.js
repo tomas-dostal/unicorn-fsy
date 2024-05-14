@@ -45,7 +45,7 @@ function NoteListProvider({children}) {
     const [noteLoadObject, setNoteLoadObject] = useState({
         state: "ready",
         error: null,
-        data: { ...initialNoteList, mockedData}
+        data: [...initialNoteList, ...mockedData]
     });
 
     useEffect(() => {
@@ -69,7 +69,7 @@ function NoteListProvider({children}) {
         //     }));
         //     throw new Error(JSON.stringify(responseJson, null, 2));
         try {
-            setNoteLoadObject({ state: "ready", data: initialNoteList });
+            setNoteLoadObject({ state: "ready", data: [...initialNoteList, ...mockedData] });
         } catch (error) {
             setNoteLoadObject((current) => ({
                 state: "error",
